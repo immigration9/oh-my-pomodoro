@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { START_TIMER, STOP_TIMER, RESET_TIMER } from '../actions/actions';
 
 class Counter extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      status: false,
       current: 0
     };
     this.tick = this.tick.bind(this);
@@ -16,16 +19,23 @@ class Counter extends Component {
     clearInterval(this.timer);
   }
   componentWillReceiveProps(nextProps) {
+    let { timerStatus, timerTime } = this.props;
 
+    this.setState({
+      status: timerStatus,
+      current: timerTime
+    });
   }
 
   tick() {
-    let { current } = this.state;
+    let { status, current } = this.state;
     const second = 1000;
 
-    this.setState({
-      current: current - second
-    });
+    if ( status === true ) {
+      this.setState({
+        current: current - second
+      });
+    }
   }
 
   renderTimer() {
@@ -54,4 +64,11 @@ class Counter extends Component {
   }
 }
 
-export default Counter;
+const mapStateToProps = (state) => {
+  return {
+    timerStatus: state.timerStatus,
+    timerTime: state.timerTime
+  }
+} 
+
+export default connect()(Counter);

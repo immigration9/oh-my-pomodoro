@@ -6,10 +6,10 @@ import registerServiceWorker from './registerServiceWorker';
 
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import pomodoro from './reducers/reducers'
+import pomodoroApp from './reducers/reducers'
 
 let store = createStore({
-  pomodoro
+  pomodoroApp
 });
 let rootElement = document.getElementById('root');
 
