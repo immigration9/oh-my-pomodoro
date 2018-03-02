@@ -7,9 +7,9 @@ export default class Reset extends Component {
     return (
       <div>
         <Button 
-          type="primary"
+          type="dashed"
           onClick={() => this.handleClick()}>
-        Start
+        Reset
         </Button>
       </div>
     );

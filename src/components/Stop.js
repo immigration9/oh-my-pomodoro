@@ -4,12 +4,13 @@ import Button from 'antd/lib/button';
 
 export default class Stop extends Component {
   render() {
+    let { timer } = this.props;
     return (
       <div>
         <Button 
-          type="primary"
+          type="danger"
           onClick={() => this.handleClick()}>
-        Start
+        Stop
         </Button>
       </div>
     );
@@ -19,4 +20,3 @@ export default class Stop extends Component {
     this.props.onStopClick();
   }
 }
-

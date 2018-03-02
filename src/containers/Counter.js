@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { START_TIMER, STOP_TIMER, RESET_TIMER } from '../actions/actions';
+import { changeTime } from '../actions/timerActions';
 
 class Counter extends Component {
   constructor(props) {
     super(props)
+    let { timerTime } = this.props;
+    
     this.state = {
       status: false,
-      current: 0
+      current: (timerTime !== undefined) ? timerTime : 0
     };
     this.tick = this.tick.bind(this);
   }
@@ -19,22 +21,22 @@ class Counter extends Component {
     clearInterval(this.timer);
   }
   componentWillReceiveProps(nextProps) {
-    let { timerStatus, timerTime } = this.props;
+    let { timerStatus, timerTime } = nextProps;
 
     this.setState({
-      status: timerStatus,
-      current: timerTime
+      status: nextProps.timerStatus,
+      current: nextProps.timerTime
     });
   }
 
   tick() {
     let { status, current } = this.state;
+    let { onChangeTime } = this.props;
     const second = 1000;
 
-    if ( status === true ) {
-      this.setState({
-        current: current - second
-      });
+    if ( status === true && current !== 0) {
+      // Change time when it is enabled
+      onChangeTime();
     }
   }
 
@@ -59,16 +61,20 @@ class Counter extends Component {
     return (
       <div>{this.renderTimer()}</div>
     )
-    
-    
   }
 }
 
 const mapStateToProps = (state) => {
   return {
-    timerStatus: state.timerStatus,
-    timerTime: state.timerTime
+    timerStatus: state.timer.timerStatus,
+    timerTime: state.timer.timerValue
   }
 } 
 
-export default connect()(Counter);
+let mapDispatchToProps = (dispatch) => {
+  return {
+    onChangeTime: () => dispatch(changeTime())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Counter);

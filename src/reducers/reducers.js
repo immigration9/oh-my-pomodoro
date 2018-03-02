@@ -1,32 +1,54 @@
 import { combineReducers } from 'redux';
-import { START_TIMER, STOP_TIMER, RESET_TIMER } from '../actions/actions';
+import { START_TIMER, STOP_TIMER, RESET_TIMER, CHANGE_TIMER } from '../actions/timerActions';
 
-const defaultState = { timerStatus: false, initialValue: 60000 }
+const defaultTimerState = { 
+  timerStatus: false, 
+  timerValue: 60000,
+};
 
-function timer(state = defaultState, action) {
+const defaultPomodoroStatus = ["Working", "Short Break", "Long Break"];
+const defaultPomodoroState = {
+  pomodoroStatus: defaultPomodoroStatus[0]
+}
+
+function timer(state = defaultTimerState, action) {
   switch (action.type) {
   case START_TIMER:
-  return {
-    timerStatus: action.status,
-    timer: action.timer
-    };
+    return Object.assign({}, state, {
+      timerStatus: action.status,
+    });
   case STOP_TIMER:
-    return {
-      timerStatus: action.status,
-      timer: action.timer
-    };
+    return Object.assign({}, state, {
+      timerStatus: action.status
+    });
   case RESET_TIMER:
-    return { 
+    return Object.assign({}, state, {
       timerStatus: action.status,
-      timer: action.timer
-    };
+      timerValue: action.timer
+    });
+  case CHANGE_TIMER:
+    return Object.assign({}, state, {
+      timerValue: state.timerValue - action.tick
+    });
+  default:
+    return state;
+  }
+}
+
+function status(state = defaultPomodoroState, action) {
+  switch (action.type) {
+  case CHANGE_TYPE:
+    return Object.assign({}, state, {
+      pomodoroStatus: action.type
+    });
   default:
     return state;
   }
 }
 
 const pomodoroApp = combineReducers({
-  timer
+  timer,
+  status
 });
 
 export default pomodoroApp;
